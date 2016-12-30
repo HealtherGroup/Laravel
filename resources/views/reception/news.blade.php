@@ -29,7 +29,7 @@
         </div>
                         <div class="box-footer clearfix">
 
-               <div style="float:right"> {!! $data->render() !!}</div>
+               <div style="float:right"> {!! $newslist->render() !!}</div>
                 </div>
     </div>
 </div>

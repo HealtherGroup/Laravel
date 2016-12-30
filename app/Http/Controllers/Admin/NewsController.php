@@ -32,10 +32,66 @@ class NewsController extends Controller
             return back();
         }
     }
+    /**
+     *2016年12月30日15:57:05
+     * 
+     *
+     */
     public function lists()
     {
-        $data=\DB::table('news')->paginate(6);
+        $data = \DB::table('news')->get();
          //dd($data);
-        return view('admin.news.list',['data'=>$data]);
+        return view('admin.news.list',['data' => $data]);
+    }
+    
+    public function edit($id)
+    {
+        $data = \DB::table('news')->where('id',$id)->first();
+        //dd($data);
+        return view('admin.news.edit',['data'=>$data]);
+    }
+    
+    public function update(Request $request)
+    {
+        $id=$request->input('id');
+        $data = $request->except('_token','id');
+        //dd($data);
+        $img=$request->file('img');
+        //dd($img);
+       
+        //die;
+        if(!empty($request -> input('img'))){
+        $res = \DB::table('news') -> where('id',$id) -> first();
+            if(unlink('$res->img')){
+                $file = $request->file('img');
+                $allowed_extensions = ["png", "jpg", "gif"];
+                $destinationPath = 'uploads/images/';
+                $extension = $file->getClientOriginalExtension();
+                $fileName = '/'.$destinationPath.''.str_random(10).'.'.$extension;
+                $file->move($destinationPath, $fileName);
+             }else{
+                 return '图片上传失败';
+             }
+            $row = \DB::table('news') -> where('id',$id) -> update($data);
+                    if($row){
+                        return redirect('/admin/newslist');
+                    }else{
+                        return 0;
+                    }
+            }else{
+            return '修改失败';
+        }
+       
+    }
+    
+    public function del($id)
+    {
+        //return $id;
+        $row = \DB::table('news') -> where('id',$id) -> delete();
+        if($row){
+            return redirect('/admin/newslist');
+        }else{
+            return 0;
+        }
     }
 }

@@ -161,6 +161,12 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware' => ['auth'
 	$router->post('/doaddnews','NewsController@doadd');
         //新闻列表
         $router->get('/newslist','NewsController@lists');
+        //查看新闻 
+        $router->get('/newsedit/{id}','NewsController@edit');
+        //修改新闻
+        $router->post('/newsupdate','NewsController@update');
+        //删除新闻
+         $router->get('/newsdel/{id}','NewsController@del');
 	// 权限
 	require(__DIR__ . '/admin/permission.php');
 	// 角色
